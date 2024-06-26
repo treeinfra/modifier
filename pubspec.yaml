@@ -1,5 +1,5 @@
 name: modifier
-description: "A new Flutter package project."
+description: Syntax sugar optimizations to avoid nesting hell in Flutter.
 version: 0.1.0
 homepage: https://github.com/treeinfra/modifier
 environment: {sdk: ">=3.4.3 <4.0.0", flutter: ">=3.22.2"}
