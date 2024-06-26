@@ -1,0 +1,16 @@
+name: publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  # https://dart.dev/tools/pub/automated-publishing
+  publish:
+    runs-on: ubuntu-latest
+    permissions: {id-token: write}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - run: sh review.sh
+      - run: dart pub publish --force
