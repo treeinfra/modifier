@@ -1,0 +1,50 @@
+# Platform specified files.
+.DS_Store
+
+# Code editors.
+.atom/
+.idea/
+.fleet/
+*.iml
+*.ipr
+*.iws
+*.sln
+*.swp
+
+# Non-git version control files.
+migrate_working_dir/
+.svn/
+.hg/
+.history
+
+# Flutter dependencies and machine managed files.
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+build/
+
+# Flutter dependencies override for debug.
+pubspec_overrides.yaml
+
+# Ignore lockfile for potential usage of mirrors.
+pubspec.lock
+Podfile.lock
+
+# Symbolication and obfuscation.
+app.*.symbols
+app.*.map.json
+
+# Compilation process files.
+.buildlog/
+*.class
+*.log
+*.pyc
+
+# Android Studio will place build artifacts here.
+/android/app/debug
+/android/app/profile
+/android/app/release
