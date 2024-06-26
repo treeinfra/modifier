@@ -1,0 +1,13 @@
+name: review
+
+on:
+  push: {branches: ["main", "dev"]}
+  pull_request: {branches: ["main", "dev"]}
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - run: sh review.sh
