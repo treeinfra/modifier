@@ -1,6 +1,7 @@
 ## 0.2.0
 
 - Wrap center align to parent.
+- Add examples to compare before and after.
 
 ## 0.1.0
 
