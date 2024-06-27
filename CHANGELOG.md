@@ -1,5 +1,6 @@
 ## 0.2.0
 
+- Inherit handle and test.
 - Wrap center align to parent.
 - Add examples to compare before and after.
 
