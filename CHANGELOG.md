@@ -1,3 +1,7 @@
+## 0.2.0
+
+- Wrap center align to parent.
+
 ## 0.1.0
 
 - Basic wrappers to ensure a text can display without `MaterialApp` ancestor.
