@@ -1,7 +1,7 @@
-## 0.2.0
+## 0.1.1
 
-- Inherit handle and test.
 - Wrap center align to parent.
+- Inherit handle and test (experimental).
 - Add examples to compare before and after.
 
 ## 0.1.0
