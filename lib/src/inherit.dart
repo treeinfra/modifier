@@ -53,22 +53,46 @@ class InheritStatic<T> extends InheritedWidget {
 }
 
 extension WrapInherit on Widget {
+  /// Wrap [Inherit] around this widget with given [data],
+  /// and you can find it in the widget tree by calling [FindInherit.find].
   Widget inherit<T>(T data) => Inherit<T>(data: data, child: this);
 
+  /// Wrap [InheritStatic] around this widget with given [data].
+  /// It's similar to [inherit], but it is has better performance
+  /// because it won't check whether the value has changed.
+  /// And you can find it in the widget tree by calling [FindInherit.find].
   Widget inheritStatic<T>(T data) => InheritStatic<T>(data: data, child: this);
 }
 
 extension FindInherit on BuildContext {
+  /// Find data from widget tree with given type.
+  ///
+  /// As there might not be any [Inherit]ed data with given type,
+  /// the return value might be null.
+  /// You can consider using [findAndCheck], [findAndDefault], or [findAndTrust]
+  /// for a conciser coding style, rather than processing the nullable result
+  /// of this method.
   T? find<T>() => dependOnInheritedWidgetOfExactType<Inherit<T>>()?.data;
 
+  /// [find] data from widget tree with given type.
+  /// And if not found, then use the [defaultValue].
   T findAndDefault<T>(T defaultValue) => find<T>() ?? defaultValue;
 
+  /// [find] data from widget tree with given type.
+  ///
+  /// You must ensure the data will be found.
+  /// There's only an `assert` to check whether it will find the data
+  /// in debug mode and there's no check in release mode.
+  /// If you cannot make sure there will be such data,
+  /// please consider using [find] or [findAndCheck] as alternative.
   T findAndTrust<T>() {
     final data = find<T>();
     assert(data != null, 'cannot find $T in context');
     return data!;
   }
 
+  /// [find] data from widget tree with given type.
+  /// And if not found, then throw an exception.
   T findAndCheck<T>() {
     final data = find<T>();
     if (data == null) throw Exception('cannot find $T in context');
