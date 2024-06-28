@@ -61,6 +61,7 @@ void testInheritHandler() {
             .handle('message')
             .ensureDirection(context)
             .ensureMedia(context)));
+
     expect(find.text('message: message'), findsOneWidget);
     expect(find.text('append dot'), findsOneWidget);
     await t.tap(find.text('append dot'));
@@ -71,18 +72,35 @@ void testInheritHandler() {
   testWidgets('inherit handler outer modify', (t) async {
     await t.pumpWidget(builder((context) => builder(
           (context) => builder((context) {
-            final outer = context.findAndTrust<String>();
-            final inner = context.findAndTrust<MessageExample>();
+            final inner = context.findAndTrust<String>();
+            final outer = context.findAndTrust<int>();
+            void append() => context.update<String>((inner) => '$inner.');
+            void increase() => context.update<int>((outer) => outer + 1);
             return [
+              'inner message: $inner'.asText,
               'outer message: $outer'.asText,
-              'inner message: ${inner.message}'.asText,
-              'append dot inner'.asText.on(),
-              'append dot outer'.asText.on(),
+              'append dot inner'.asText.on(tap: append),
+              'increase outer'.asText.on(tap: increase),
             ].asColumn.center;
-          }).handle(MessageExample(message: context.findAndTrust<String>())),
-        )
-            .handle('inherited message')
-            .ensureDirection(context)
-            .ensureMedia(context)));
+          }).handle(context.find<int>().toString()),
+        ).handle(123456).ensureDirection(context).ensureMedia(context)));
+
+    // Initial values.
+    expect(find.text('inner message: 123456'), findsOneWidget);
+    expect(find.text('outer message: 123456'), findsOneWidget);
+    expect(find.text('append dot inner'), findsOneWidget);
+    expect(find.text('increase outer'), findsOneWidget);
+
+    // Change inner value but outer won't change.
+    await t.tap(find.text('append dot inner'));
+    await t.pump();
+    expect(find.text('inner message: 123456.'), findsOneWidget);
+    expect(find.text('outer message: 123456'), findsOneWidget);
+
+    // Change outer value and inner will change.
+    await t.tap(find.text('increase outer'));
+    await t.pump();
+    expect(find.text('inner message: 123457'), findsOneWidget);
+    expect(find.text('outer message: 123457'), findsOneWidget);
   });
 }
