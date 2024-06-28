@@ -1,5 +1,6 @@
 ## 0.1.2
 
+- Wrap `Text` from `String`.
 - Namespace cancel wrap (API change).
 - Theme inherit interface definitions (experimental).
 
