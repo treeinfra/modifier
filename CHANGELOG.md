@@ -2,6 +2,7 @@
 
 - Wrap inherit and handler.
 - Wrap paddings.
+- Runner scripts for examples.
 - Basic gesture wrapper (experimental).
 - Remove unnecessary static inherit class and extensions (API change).
 
