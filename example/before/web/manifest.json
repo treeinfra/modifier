@@ -1,0 +1,12 @@
+{
+  "name": "modifier_example_before",
+  "short_name": "before",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0175C2",
+  "theme_color": "#0175C2",
+  "description": "An example before using the modifier package.",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false,
+  "icons": []
+}

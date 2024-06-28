@@ -1,6 +1,6 @@
 name: modifier
 description: Syntax sugar optimizations to avoid nesting hell in Flutter.
-version: 0.1.2
+version: 0.1.3
 homepage: https://github.com/treeinfra/modifier
 environment: {sdk: ">=3.4.3 <4.0.0", flutter: ">=3.22.2"}
 topics:

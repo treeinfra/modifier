@@ -22,7 +22,9 @@ class App extends StatelessWidget {
       child: const Directionality(
         textDirection: TextDirection.ltr,
         child: Center(
-          child: Text('app root'),
+          child: Text(
+            'Complex and endless nesting hell.',
+          ),
         ),
       ),
     );
@@ -44,9 +46,11 @@ class App extends StatelessWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context) => const Text('app root')
+  Widget build(BuildContext context) => 'Concise chain style programming.'
+      .asText
       .center
       .ensureDirection(context)
       .ensureMedia(context);
 }
+
 ```

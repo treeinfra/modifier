@@ -139,6 +139,10 @@ class InheritHandlerAPI<T> {
   final void Function(T value) update;
 }
 
+extension WrapInheritHandler on Widget {
+  Widget handle<T>(T data) => InheritHandler<T>(data: data, child: this);
+}
+
 extension UpdateInheritHandler on BuildContext {
   void update<T>(T Function(T raw) updater) {
     final raw = find<T>();
