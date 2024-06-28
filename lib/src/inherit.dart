@@ -110,6 +110,10 @@ class _InheritHandlerState<T> extends State<InheritHandler<T>> {
       widget.child.inherit(_data).inherit(InheritHandlerAPI(update));
 }
 
+/// This class is an encapsulation of [_InheritHandlerState.update].
+/// It is here because the signature of such method is easy to be confused,
+/// that it requires such encapsulation to distinguish from
+/// other potential functions with the same signature.
 class InheritHandlerAPI<T> {
   const InheritHandlerAPI(this.update);
 
@@ -121,12 +125,27 @@ extension WrapInheritHandler on Widget {
 }
 
 extension UpdateInheritHandler on BuildContext {
+  /// When inherit certain type of data inside widget tree
+  /// using [WrapInheritHandler.handle] extension method,
+  /// you can use this method to modify its value.
+  ///
+  /// This method will not check whether there are such inherit
+  /// in the widget tree. It there's no such inherit,
+  /// it will return without any error.
+  /// If you'd like to ensure there's such inherit, see [updateAndCheck].
   void update<T>(T Function(T raw) updater) {
     final raw = find<T>();
     final api = find<InheritHandlerAPI<T>>();
     if (raw != null && api != null) api.update(updater(raw));
   }
 
+  /// When inherit certain type of data inside widget tree
+  /// using [WrapInheritHandler.handle] extension method,
+  /// you can use this method to modify its value.
+  ///
+  /// This method will throw exception when cannot find such inherit
+  /// inside the widget tree.
+  /// If you'd like to ignore such errors, please refer to [update].
   void updateAndCheck<T>(T Function(T raw) updater) {
     final raw = findAndCheck<T>();
     final api = findAndCheck<InheritHandlerAPI<T>>();
