@@ -6,21 +6,21 @@ Widget builder(Widget Function(BuildContext context) builder) =>
 
 extension WrapMedia on Widget {
   /// Chain style syntax sugar of wrapping [MediaQuery].
-  Widget wrapMedia(MediaQueryData data) => MediaQuery(data: data, child: this);
+  Widget media(MediaQueryData data) => MediaQuery(data: data, child: this);
 
   /// Ensure that the inner widget can get [MediaQueryData] from the context.
   /// If there's no available [MediaQueryData], it will get from the [View].
   Widget ensureMedia(BuildContext context) {
-    final media = MediaQuery.maybeOf(context);
-    return media == null
-        ? wrapMedia(MediaQueryData.fromView(View.of(context)))
+    final contextMedia = MediaQuery.maybeOf(context);
+    return contextMedia == null
+        ? media(MediaQueryData.fromView(View.of(context)))
         : this;
   }
 }
 
 extension WrapDirection on Widget {
   /// Chain style sugar of wrapping [Directionality].
-  Widget wrapDirection(TextDirection direction) =>
+  Widget direction(TextDirection direction) =>
       Directionality(textDirection: direction, child: this);
 
   /// Ensure that the inner widget can get [TextDirection] from the context.
@@ -30,8 +30,8 @@ extension WrapDirection on Widget {
     BuildContext context, {
     TextDirection defaultValue = TextDirection.ltr,
   }) {
-    final direction = Directionality.maybeOf(context);
-    return direction == null ? wrapDirection(defaultValue) : this;
+    final contextDirection = Directionality.maybeOf(context);
+    return contextDirection == null ? direction(defaultValue) : this;
   }
 }
 

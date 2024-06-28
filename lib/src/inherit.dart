@@ -12,7 +12,7 @@ class InheritedData<T> extends InheritedWidget {
   ///    and let all related widget to re-renderer when the data changed.
   ///    But it let all similar inherit data to share the code
   ///    rather than inherit raw [InheritedWidget] once and once again.
-  /// 3. It's more recommended to use [WrapInherit.wrapInherit]
+  /// 3. It's more recommended to use [WrapInherit.inherit]
   ///    (an extension on [Widget])
   ///    rather than calling this constructor directly.
   const InheritedData({
@@ -28,7 +28,7 @@ class InheritedData<T> extends InheritedWidget {
       this.data != oldWidget.data;
 }
 
-class InheritedUnchangedData<T> extends InheritedWidget {
+class InheritedStaticData<T> extends InheritedWidget {
   /// Similar to [InheritedData], but the [data] will never change.
   ///
   /// 1. Register an unchanged data into the widget tree.
@@ -37,10 +37,10 @@ class InheritedUnchangedData<T> extends InheritedWidget {
   ///    (an extension on [BuildContext]).
   /// 2. This widget is designed to handle apis such as static functions,
   ///    which will not change during the whole life cycle.
-  /// 3. It's more recommended to use [WrapInherit.wrapInheritUnchanged]
+  /// 3. It's more recommended to use [WrapInherit.inheritStatic]
   ///    (an extension on [Widget])
   ///    rather than calling this constructor directly.
-  const InheritedUnchangedData({
+  const InheritedStaticData({
     super.key,
     required this.data,
     required super.child,
@@ -53,10 +53,10 @@ class InheritedUnchangedData<T> extends InheritedWidget {
 }
 
 extension WrapInherit on Widget {
-  Widget wrapInherit<T>(T data) => InheritedData<T>(data: data, child: this);
+  Widget inherit<T>(T data) => InheritedData<T>(data: data, child: this);
 
-  Widget wrapInheritUnchanged<T>(T data) =>
-      InheritedUnchangedData<T>(data: data, child: this);
+  Widget inheritStatic<T>(T data) =>
+      InheritedStaticData<T>(data: data, child: this);
 }
 
 extension FindInherit on BuildContext {
@@ -75,4 +75,23 @@ extension FindInherit on BuildContext {
     if (data == null) throw Exception('cannot find $T in context');
     return data;
   }
+}
+
+class InheritHandler<T> extends StatefulWidget {
+  const InheritHandler({
+    super.key,
+    required this.data,
+    required this.child,
+  });
+
+  final T data;
+  final Widget child;
+
+  @override
+  State<InheritHandler<T>> createState() => _InheritHandlerState<T>();
+}
+
+class _InheritHandlerState<T> extends State<InheritHandler<T>> {
+  @override
+  Widget build(BuildContext context) => widget.child.inherit(widget.data);
 }

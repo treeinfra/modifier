@@ -1,3 +1,8 @@
+## 0.1.2
+
+- Namespace cancel wrap (API change).
+- Theme inherit interface definitions (experimental).
+
 ## 0.1.1
 
 - Wrap center align to parent.

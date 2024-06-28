@@ -11,7 +11,7 @@ void main() {
             .center
             .ensureDirection(context)
             .ensureMedia(context),
-      ).wrapInherit(message),
+      ).inherit(message),
     );
     expect(find.text(message), findsOneWidget);
   });
