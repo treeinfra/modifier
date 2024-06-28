@@ -1,0 +1,12 @@
+name: modifier_example_before
+description: An example before using the modifier package.
+publish_to: "none"
+version: 0.0.0
+environment: {sdk: ">=3.4.3 <4.0.0"}
+
+dependencies:
+  flutter: {sdk: flutter}
+
+dev_dependencies:
+  flutter_test: {sdk: flutter}
+  lintall: ^0.1.0
