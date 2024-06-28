@@ -4,5 +4,5 @@
 - After: after using the `modifier` package.
 
 The two examples are just for demonstration purposes.
-It's not necessary to run or focus on its UI.
-Please focus on its source code and compare the difference.
+It's not necessary to focus on its UI.
+Just focus on its source code and compare the difference.
