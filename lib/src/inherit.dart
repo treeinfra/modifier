@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-class InheritedData<T> extends InheritedWidget {
+class Inherit<T> extends InheritedWidget {
   /// A wrap of generic on the [InheritedWidget] widget.
   ///
   /// 1. Register an inherited [data] into the widget tree.
@@ -15,7 +15,7 @@ class InheritedData<T> extends InheritedWidget {
   /// 3. It's more recommended to use [WrapInherit.inherit]
   ///    (an extension on [Widget])
   ///    rather than calling this constructor directly.
-  const InheritedData({
+  const Inherit({
     super.key,
     required this.data,
     required super.child,
@@ -24,12 +24,12 @@ class InheritedData<T> extends InheritedWidget {
   final T data;
 
   @override
-  bool updateShouldNotify(covariant InheritedData<T> oldWidget) =>
+  bool updateShouldNotify(covariant Inherit<T> oldWidget) =>
       this.data != oldWidget.data;
 }
 
-class InheritedStaticData<T> extends InheritedWidget {
-  /// Similar to [InheritedData], but the [data] will never change.
+class InheritStatic<T> extends InheritedWidget {
+  /// Similar to [Inherit], but the [data] will never change.
   ///
   /// 1. Register an unchanged data into the widget tree.
   ///    That all its descendants can access the [data]
@@ -40,7 +40,7 @@ class InheritedStaticData<T> extends InheritedWidget {
   /// 3. It's more recommended to use [WrapInherit.inheritStatic]
   ///    (an extension on [Widget])
   ///    rather than calling this constructor directly.
-  const InheritedStaticData({
+  const InheritStatic({
     super.key,
     required this.data,
     required super.child,
@@ -53,14 +53,13 @@ class InheritedStaticData<T> extends InheritedWidget {
 }
 
 extension WrapInherit on Widget {
-  Widget inherit<T>(T data) => InheritedData<T>(data: data, child: this);
+  Widget inherit<T>(T data) => Inherit<T>(data: data, child: this);
 
-  Widget inheritStatic<T>(T data) =>
-      InheritedStaticData<T>(data: data, child: this);
+  Widget inheritStatic<T>(T data) => InheritStatic<T>(data: data, child: this);
 }
 
 extension FindInherit on BuildContext {
-  T? find<T>() => dependOnInheritedWidgetOfExactType<InheritedData<T>>()?.data;
+  T? find<T>() => dependOnInheritedWidgetOfExactType<Inherit<T>>()?.data;
 
   T findAndDefault<T>(T defaultValue) => find<T>() ?? defaultValue;
 
