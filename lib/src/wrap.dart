@@ -4,6 +4,16 @@ import 'package:flutter/widgets.dart';
 Widget builder(Widget Function(BuildContext context) builder) =>
     Builder(builder: builder);
 
+extension WrapTextWidget on String {
+  /// Convert a string into text.
+  ///
+  /// It's a syntax sugar as shortcut of [Text].
+  /// But it's strongly not recommended to use if you need better performance,
+  /// because it will disable the `const` decoration over the [Text],
+  /// that more steps will be done when rendering.
+  Text get asText => Text(this);
+}
+
 extension WrapMedia on Widget {
   /// Chain style syntax sugar of wrapping [MediaQuery].
   Widget media(MediaQueryData data) => MediaQuery(data: data, child: this);
