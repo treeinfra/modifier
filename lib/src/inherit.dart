@@ -115,6 +115,40 @@ class InheritHandler<T> extends StatefulWidget {
 }
 
 class _InheritHandlerState<T> extends State<InheritHandler<T>> {
+  late T _data = widget.data;
+
+  void update(T value) {
+    if (_data != value) setState(() => _data = value);
+  }
+
   @override
-  Widget build(BuildContext context) => widget.child.inherit(widget.data);
+  void didUpdateWidget(covariant InheritHandler<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    update(widget.data);
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child
+      .inherit(widget.data)
+      .inheritStatic(InheritHandlerAPI(update));
+}
+
+class InheritHandlerAPI<T> {
+  const InheritHandlerAPI(this.update);
+
+  final void Function(T value) update;
+}
+
+extension UpdateInheritHandler on BuildContext {
+  void update<T>(T Function(T raw) updater) {
+    final raw = find<T>();
+    final api = find<InheritHandlerAPI<T>>();
+    if (raw != null && api != null) api.update(updater(raw));
+  }
+
+  void updateAndCheck<T>(T Function(T raw) updater) {
+    final raw = findAndCheck<T>();
+    final api = findAndCheck<InheritHandlerAPI<T>>();
+    api.update(updater(raw));
+  }
 }
