@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 
 /// An encapsulation of [Builder], also used as an alias.
@@ -49,4 +50,12 @@ extension WrapAlign on Widget {
   /// Wrap current widget with [Center],
   /// which will display current widget in the center of the parent.
   Widget get center => Center(child: this);
+}
+
+extension WrapList on List<Widget> {
+  Widget get asColumn => Column(mainAxisSize: MainAxisSize.min, children: this);
+
+  Widget get asRow => Row(mainAxisSize: MainAxisSize.min, children: this);
+
+  Widget get asStack => Stack(children: this);
 }

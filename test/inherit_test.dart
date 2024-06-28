@@ -4,6 +4,18 @@ import 'package:modifier/modifier.dart';
 
 void main() {
   testFindAndTrust();
+  testInheritHandler();
+}
+
+/// Wrapping a single text message for demonstration.
+/// See the code inside [testFindAndTrust].
+class MessageExample {
+  const MessageExample({required this.message});
+
+  final String message;
+
+  MessageExample copyWith({String? message}) =>
+      MessageExample(message: message ?? this.message);
 }
 
 void testFindAndTrust() {
@@ -38,10 +50,28 @@ void testFindAndTrust() {
   });
 }
 
-/// Wrapping a single text message for demonstration.
-/// See the code inside [testFindAndTrust].
-class MessageExample {
-  const MessageExample({required this.message});
+void testInheritHandler() {
+  testWidgets('inherit handler', (t) async {
+    await t.pumpWidget(builder((context) => builder((context) {
+          final message = context.findAndTrust<MessageExample>();
+          return ['message: ${message.message}'.asText].asColumn;
+        })
+            .center
+            .handle(const MessageExample(message: 'message'))
+            .ensureDirection(context)
+            .ensureMedia(context)));
+  });
 
-  final String message;
+  testWidgets('inherit handler outer modify', (t) async {
+    await t.pumpWidget(builder((context) => builder(
+          (context) => builder((context) {
+            final outer = context.findAndTrust<String>();
+            final inner = context.findAndTrust<MessageExample>();
+            return [
+              'outer message: $outer'.asText,
+              'inner message: ${inner.message}'.asText
+            ].asColumn.center;
+          }).handle(MessageExample(message: context.findAndTrust<String>())),
+        ).handle('message').ensureDirection(context).ensureMedia(context)));
+  });
 }
