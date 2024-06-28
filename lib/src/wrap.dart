@@ -52,6 +52,45 @@ extension WrapAlign on Widget {
   Widget get center => Center(child: this);
 }
 
+extension WrapPadding on Widget {
+  /// Wrap current widget with [Padding].
+  /// And it's parameters are encapsulations for [EdgeInsets.only].
+  Widget padding({
+    double top = 0,
+    double right = 0,
+    double bottom = 0,
+    double left = 0,
+  }) =>
+      Padding(
+        padding: EdgeInsets.only(
+          top: top,
+          right: right,
+          bottom: bottom,
+          left: left,
+        ),
+        child: this,
+      );
+
+  /// Wrap current widget with [Padding].
+  /// And it's parameters are encapsulations for [EdgeInsets.all].
+  Widget paddingAll(double value) =>
+      Padding(padding: EdgeInsets.all(value), child: this);
+
+  /// Wrap current widget with [Padding].
+  /// And it's parameters are encapsulations for [EdgeInsets.symmetric].
+  Widget paddingSymmetric({
+    double vertical = 0,
+    double horizontal = 0,
+  }) =>
+      Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: vertical,
+          horizontal: horizontal,
+        ),
+        child: this,
+      );
+}
+
 extension WrapList on List<Widget> {
   Widget get asColumn => Column(mainAxisSize: MainAxisSize.min, children: this);
 
