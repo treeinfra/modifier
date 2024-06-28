@@ -1,20 +1,16 @@
 import 'package:flutter/widgets.dart';
 
+/// A stateless widget to handle [Inherit]ed data in widget tree.
+/// You can get the data value using [FindInherit.find] extension method
+/// in the descendant widget of it in the widget tree.
+///
+/// It's strongly not recommended to use its constructor directly,
+/// please consider the [WrapInherit.inherit] extension method on [Widget]
+/// before using its constructor directly.
 class Inherit<T> extends InheritedWidget {
-  /// A wrap of generic on the [InheritedWidget] widget.
-  ///
-  /// 1. Register an inherited [data] into the widget tree.
-  ///    That all its descendants can access the [data]
-  ///    by calling the [FindInherit.find] method
-  ///    (an extension on [BuildContext]).
-  /// 2. As it extends the [InheritedWidget] it can also
-  ///    pass data to the descendants in the widget tree,
-  ///    and let all related widget to re-renderer when the data changed.
-  ///    But it let all similar inherit data to share the code
-  ///    rather than inherit raw [InheritedWidget] once and once again.
-  /// 3. It's more recommended to use [WrapInherit.inherit]
-  ///    (an extension on [Widget])
-  ///    rather than calling this constructor directly.
+  /// It's not recommended to use such constructor,
+  /// please consider the [WrapInherit.inherit] encapsulation
+  /// before using such constructor directly.
   const Inherit({
     super.key,
     required this.data,
@@ -28,44 +24,16 @@ class Inherit<T> extends InheritedWidget {
       this.data != oldWidget.data;
 }
 
-class InheritStatic<T> extends InheritedWidget {
-  /// Similar to [Inherit], but the [data] will never change.
-  ///
-  /// 1. Register an unchanged data into the widget tree.
-  ///    That all its descendants can access the [data]
-  ///    by calling the [FindInherit.find] method
-  ///    (an extension on [BuildContext]).
-  /// 2. This widget is designed to handle apis such as static functions,
-  ///    which will not change during the whole life cycle.
-  /// 3. It's more recommended to use [WrapInherit.inheritStatic]
-  ///    (an extension on [Widget])
-  ///    rather than calling this constructor directly.
-  const InheritStatic({
-    super.key,
-    required this.data,
-    required super.child,
-  });
-
-  final T data;
-
-  @override
-  bool updateShouldNotify(covariant InheritedWidget oldWidget) => false;
-}
-
 extension WrapInherit on Widget {
   /// Wrap [Inherit] around this widget with given [data],
   /// and you can find it in the widget tree by calling [FindInherit.find].
   Widget inherit<T>(T data) => Inherit<T>(data: data, child: this);
-
-  /// Wrap [InheritStatic] around this widget with given [data].
-  /// It's similar to [inherit], but it is has better performance
-  /// because it won't check whether the value has changed.
-  /// And you can find it in the widget tree by calling [FindInherit.find].
-  Widget inheritStatic<T>(T data) => InheritStatic<T>(data: data, child: this);
 }
 
 extension FindInherit on BuildContext {
   /// Find data from widget tree with given type.
+  /// Those data are stored inside into the widget tree
+  /// using the [WrapInherit.inherit] extended on [Widget].
   ///
   /// As there might not be any [Inherit]ed data with given type,
   /// the return value might be null.
@@ -75,10 +43,14 @@ extension FindInherit on BuildContext {
   T? find<T>() => dependOnInheritedWidgetOfExactType<Inherit<T>>()?.data;
 
   /// [find] data from widget tree with given type.
+  /// Those data are stored inside into the widget tree
+  /// using the [WrapInherit.inherit] extended on [Widget].
   /// And if not found, then use the [defaultValue].
   T findAndDefault<T>(T defaultValue) => find<T>() ?? defaultValue;
 
-  /// [find] data from widget tree with given type.
+  /// [find] inherited data from widget tree with given type.
+  /// Those data are stored inside into the widget tree
+  /// using the [WrapInherit.inherit] extended on [Widget].
   ///
   /// You must ensure the data will be found.
   /// There's only an `assert` to check whether it will find the data
@@ -92,6 +64,8 @@ extension FindInherit on BuildContext {
   }
 
   /// [find] data from widget tree with given type.
+  /// Those data are stored inside into the widget tree
+  /// using the [WrapInherit.inherit] extended on [Widget].
   /// And if not found, then throw an exception.
   T findAndCheck<T>() {
     final data = find<T>();
@@ -100,7 +74,17 @@ extension FindInherit on BuildContext {
   }
 }
 
+/// A stateful widget to handle [Inherit]ed data in widget tree.
+/// You can change the handled data from the descendants in the widget tree
+/// using the [BuildContext]'s [InheritHandlerAPI.update] extension method.
+///
+/// It's strongly not recommended to use it directly,
+/// please consider using [WrapInheritHandler.handle] extended on [Widget]
+/// before calling its constructor directly.
 class InheritHandler<T> extends StatefulWidget {
+  /// It's not recommended to use such constructor,
+  /// please consider the [WrapInheritHandler.handle] encapsulation
+  /// before using such constructor directly.
   const InheritHandler({
     super.key,
     required this.data,
@@ -128,11 +112,14 @@ class _InheritHandlerState<T> extends State<InheritHandler<T>> {
   }
 
   @override
-  Widget build(BuildContext context) => widget.child
-      .inherit(widget.data)
-      .inheritStatic(InheritHandlerAPI(update));
+  Widget build(BuildContext context) =>
+      widget.child.inherit(_data).inherit(InheritHandlerAPI(update));
 }
 
+/// This class is an encapsulation of [_InheritHandlerState.update].
+/// It is here because the signature of such method is easy to be confused,
+/// that it requires such encapsulation to distinguish from
+/// other potential functions with the same signature.
 class InheritHandlerAPI<T> {
   const InheritHandlerAPI(this.update);
 
@@ -144,12 +131,27 @@ extension WrapInheritHandler on Widget {
 }
 
 extension UpdateInheritHandler on BuildContext {
+  /// When inherit certain type of data inside widget tree
+  /// using [WrapInheritHandler.handle] extension method,
+  /// you can use this method to modify its value.
+  ///
+  /// This method will not check whether there are such inherit
+  /// in the widget tree. It there's no such inherit,
+  /// it will return without any error.
+  /// If you'd like to ensure there's such inherit, see [updateAndCheck].
   void update<T>(T Function(T raw) updater) {
     final raw = find<T>();
     final api = find<InheritHandlerAPI<T>>();
     if (raw != null && api != null) api.update(updater(raw));
   }
 
+  /// When inherit certain type of data inside widget tree
+  /// using [WrapInheritHandler.handle] extension method,
+  /// you can use this method to modify its value.
+  ///
+  /// This method will throw exception when cannot find such inherit
+  /// inside the widget tree.
+  /// If you'd like to ignore such errors, please refer to [update].
   void updateAndCheck<T>(T Function(T raw) updater) {
     final raw = findAndCheck<T>();
     final api = findAndCheck<InheritHandlerAPI<T>>();
