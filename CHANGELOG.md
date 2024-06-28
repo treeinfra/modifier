@@ -1,3 +1,10 @@
+## 0.1.3
+
+- Wrap inherit handler (experimental).
+- Optimize examples following the pub.dev specifications.
+- Update readme examples.
+- Build example code as validation in ci.
+
 ## 0.1.2
 
 - Wrap `Text` from `String`.
