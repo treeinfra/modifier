@@ -1,6 +1,6 @@
 ## 0.2.0
 
-- Wrap inherit handler.
+- Wrap inherit and handler.
 - Wrap paddings.
 - Basic gesture wrapper (experimental).
 - Remove unnecessary static inherit class and extensions (API change).
