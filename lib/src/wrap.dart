@@ -59,3 +59,17 @@ extension WrapList on List<Widget> {
 
   Widget get asStack => Stack(children: this);
 }
+
+extension WrapGesture on Widget {
+  Widget on({
+    void Function()? tap,
+    void Function()? doubleTap,
+    void Function()? longPress,
+  }) =>
+      GestureDetector(
+        onTap: tap,
+        onDoubleTap: doubleTap,
+        onLongPress: longPress,
+        child: this,
+      );
+}

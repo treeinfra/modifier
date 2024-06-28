@@ -28,44 +28,16 @@ class Inherit<T> extends InheritedWidget {
       this.data != oldWidget.data;
 }
 
-class InheritStatic<T> extends InheritedWidget {
-  /// Similar to [Inherit], but the [data] will never change.
-  ///
-  /// 1. Register an unchanged data into the widget tree.
-  ///    That all its descendants can access the [data]
-  ///    by calling the [FindInherit.find] method
-  ///    (an extension on [BuildContext]).
-  /// 2. This widget is designed to handle apis such as static functions,
-  ///    which will not change during the whole life cycle.
-  /// 3. It's more recommended to use [WrapInherit.inheritStatic]
-  ///    (an extension on [Widget])
-  ///    rather than calling this constructor directly.
-  const InheritStatic({
-    super.key,
-    required this.data,
-    required super.child,
-  });
-
-  final T data;
-
-  @override
-  bool updateShouldNotify(covariant InheritedWidget oldWidget) => false;
-}
-
 extension WrapInherit on Widget {
   /// Wrap [Inherit] around this widget with given [data],
   /// and you can find it in the widget tree by calling [FindInherit.find].
   Widget inherit<T>(T data) => Inherit<T>(data: data, child: this);
-
-  /// Wrap [InheritStatic] around this widget with given [data].
-  /// It's similar to [inherit], but it is has better performance
-  /// because it won't check whether the value has changed.
-  /// And you can find it in the widget tree by calling [FindInherit.find].
-  Widget inheritStatic<T>(T data) => InheritStatic<T>(data: data, child: this);
 }
 
 extension FindInherit on BuildContext {
   /// Find data from widget tree with given type.
+  /// Those data are stored inside into the widget tree
+  /// using the [WrapInherit.inherit] extended on [Widget].
   ///
   /// As there might not be any [Inherit]ed data with given type,
   /// the return value might be null.
@@ -75,10 +47,14 @@ extension FindInherit on BuildContext {
   T? find<T>() => dependOnInheritedWidgetOfExactType<Inherit<T>>()?.data;
 
   /// [find] data from widget tree with given type.
+  /// Those data are stored inside into the widget tree
+  /// using the [WrapInherit.inherit] extended on [Widget].
   /// And if not found, then use the [defaultValue].
   T findAndDefault<T>(T defaultValue) => find<T>() ?? defaultValue;
 
-  /// [find] data from widget tree with given type.
+  /// [find] inherited data from widget tree with given type.
+  /// Those data are stored inside into the widget tree
+  /// using the [WrapInherit.inherit] extended on [Widget].
   ///
   /// You must ensure the data will be found.
   /// There's only an `assert` to check whether it will find the data
@@ -92,6 +68,8 @@ extension FindInherit on BuildContext {
   }
 
   /// [find] data from widget tree with given type.
+  /// Those data are stored inside into the widget tree
+  /// using the [WrapInherit.inherit] extended on [Widget].
   /// And if not found, then throw an exception.
   T findAndCheck<T>() {
     final data = find<T>();
@@ -128,9 +106,8 @@ class _InheritHandlerState<T> extends State<InheritHandler<T>> {
   }
 
   @override
-  Widget build(BuildContext context) => widget.child
-      .inherit(widget.data)
-      .inheritStatic(InheritHandlerAPI(update));
+  Widget build(BuildContext context) =>
+      widget.child.inherit(_data).inherit(InheritHandlerAPI(update));
 }
 
 class InheritHandlerAPI<T> {
