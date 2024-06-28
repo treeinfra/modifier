@@ -1,20 +1,23 @@
 import 'package:flutter/widgets.dart';
 
+/// A wrap of generic on the [InheritedWidget] widget.
+///
+/// 1. Register an inherited [data] into the widget tree.
+///    That all its descendants can access the [data]
+///    by calling the [FindInherit.find] method
+///    (an extension on [BuildContext]).
+/// 2. As it extends the [InheritedWidget] it can also
+///    pass data to the descendants in the widget tree,
+///    and let all related widget to re-renderer when the data changed.
+///    But it let all similar inherit data to share the code
+///    rather than inherit raw [InheritedWidget] once and once again.
+/// 3. It's more recommended to use [WrapInherit.inherit]
+///    (an extension on [Widget])
+///    rather than calling this constructor directly.
 class Inherit<T> extends InheritedWidget {
-  /// A wrap of generic on the [InheritedWidget] widget.
-  ///
-  /// 1. Register an inherited [data] into the widget tree.
-  ///    That all its descendants can access the [data]
-  ///    by calling the [FindInherit.find] method
-  ///    (an extension on [BuildContext]).
-  /// 2. As it extends the [InheritedWidget] it can also
-  ///    pass data to the descendants in the widget tree,
-  ///    and let all related widget to re-renderer when the data changed.
-  ///    But it let all similar inherit data to share the code
-  ///    rather than inherit raw [InheritedWidget] once and once again.
-  /// 3. It's more recommended to use [WrapInherit.inherit]
-  ///    (an extension on [Widget])
-  ///    rather than calling this constructor directly.
+  /// It's not recommended to use such constructor,
+  /// please consider the [WrapInherit.inherit] encapsulation
+  /// before using such constructor directly.
   const Inherit({
     super.key,
     required this.data,
