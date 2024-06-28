@@ -13,11 +13,6 @@ class MessageExample {
   const MessageExample({required this.message});
 
   final String message;
-
-  MessageExample get appendDot => copyWith(message: '$message.');
-
-  MessageExample copyWith({String? message}) =>
-      MessageExample(message: message ?? this.message);
 }
 
 void testFindAndTrust() {
@@ -55,16 +50,15 @@ void testFindAndTrust() {
 void testInheritHandler() {
   testWidgets('inherit handler', (t) async {
     await t.pumpWidget(builder((context) => builder((context) {
-          final message = context.findAndTrust<MessageExample>().message;
-          void update() => context.update<MessageExample>((m) => m.appendDot);
-
+          final message = context.findAndTrust<String>();
+          void update() => context.update<String>((message) => '$message.');
           return [
             'message: $message'.asText,
             'append dot'.asText.on(tap: update)
           ].asColumn;
         })
             .center
-            .handle(const MessageExample(message: 'message'))
+            .handle('message')
             .ensureDirection(context)
             .ensureMedia(context)));
     expect(find.text('message: message'), findsOneWidget);
@@ -81,9 +75,14 @@ void testInheritHandler() {
             final inner = context.findAndTrust<MessageExample>();
             return [
               'outer message: $outer'.asText,
-              'inner message: ${inner.message}'.asText
+              'inner message: ${inner.message}'.asText,
+              'append dot inner'.asText.on(),
+              'append dot outer'.asText.on(),
             ].asColumn.center;
           }).handle(MessageExample(message: context.findAndTrust<String>())),
-        ).handle('message').ensureDirection(context).ensureMedia(context)));
+        )
+            .handle('inherited message')
+            .ensureDirection(context)
+            .ensureMedia(context)));
   });
 }
