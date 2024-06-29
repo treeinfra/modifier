@@ -91,6 +91,23 @@ extension WrapPadding on Widget {
       );
 }
 
+extension WrapColor on Widget {
+  Widget background(Color color) => ColoredBox(color: color, child: this);
+
+  Widget foreground(BuildContext context, Color color) =>
+      textForeground(context, color).iconForeground(context, color);
+
+  Widget textForeground(BuildContext context, Color color) {
+    final font = DefaultTextStyle.of(context).style.copyWith(color: color);
+    return DefaultTextStyle(style: font, child: this);
+  }
+
+  Widget iconForeground(BuildContext context, Color color) {
+    final icon = IconTheme.of(context).copyWith(color: color);
+    return IconTheme(data: icon, child: this);
+  }
+}
+
 extension WrapList on List<Widget> {
   Widget get asColumn => Column(mainAxisSize: MainAxisSize.min, children: this);
 
