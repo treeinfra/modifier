@@ -1,3 +1,7 @@
+## 0.3.0
+
+- Wrap media with default value.
+
 ## 0.2.0
 
 - Wrap inherit and handler.

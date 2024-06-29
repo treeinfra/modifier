@@ -21,10 +21,10 @@ extension WrapMedia on Widget {
 
   /// Ensure that the inner widget can get [MediaQueryData] from the context.
   /// If there's no available [MediaQueryData], it will get from the [View].
-  Widget ensureMedia(BuildContext context) {
+  Widget ensureMedia(BuildContext context, {MediaQueryData? defaultValue}) {
     final contextMedia = MediaQuery.maybeOf(context);
     return contextMedia == null
-        ? media(MediaQueryData.fromView(View.of(context)))
+        ? media(defaultValue ?? MediaQueryData.fromView(View.of(context)))
         : this;
   }
 }
