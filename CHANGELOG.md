@@ -1,3 +1,11 @@
+## 0.4.0
+
+- Theme template and theme handler.
+- Support customized theme on mixin.
+- Theme handler adapt system brightness change.
+- Remove unnecessary encapsulations and tidy comments.
+- Inherit on change trigger (experimental).
+
 ## 0.3.0
 
 - Wrap media with default value.
