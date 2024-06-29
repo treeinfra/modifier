@@ -83,18 +83,15 @@ class _ThemeHandlerState<T extends Theme> extends State<ThemeHandler<T>> {
     if (_light != widget.light) setState(() => _light = widget.light);
   }
 
-  void updateMode(ThemeMode Function(ThemeMode raw) updater) {
-    final mode = updater(_mode);
+  void updateMode(ThemeMode mode) {
     if (_mode != mode) setState(() => _mode = mode);
   }
 
-  void updateCurrentTheme(T Function(T raw) updater) {
+  void updateCurrentTheme(T theme) {
     switch (adaptedBrightness) {
       case Brightness.dark:
-        final theme = updater(_dark);
         if (_dark != theme) setState(() => _dark = theme);
       case Brightness.light:
-        final theme = updater(_light);
         if (_light != theme) setState(() => _light = theme);
     }
   }

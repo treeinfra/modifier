@@ -34,29 +34,77 @@ void main() {
     await builder((context) {
       final platformBrightness = MediaQuery.of(context).platformBrightness;
       return [
+        'platform: ${platformBrightness.name}'.asText,
         'brightness: ${context.findAndTrust<Brightness>().name}'.asText,
         'mode: ${context.findAndTrust<ThemeMode>().name}'.asText,
-        'platform: ${platformBrightness.name}'.asText,
       ].asColumn;
     })
         .center
-        .builder((context, child) => child
-            .theme(light: light, dark: dark)
-            .ensureDirection(context)
-            .ensureMedia(context))
+        .theme(light: light, dark: dark)
+        .builder((context, child) => child.ensureDirection(context))
+        .builder((context, child) => child.ensureMedia(context))
         .pump(t);
 
     t.binding.platformDispatcher.platformBrightnessTestValue = Brightness.light;
     await t.pump();
+    expect(find.text('platform: ${Brightness.light.name}'), findsOneWidget);
     expect(find.text('brightness: ${Brightness.light.name}'), findsOneWidget);
     expect(find.text('mode: ${ThemeMode.system.name}'), findsOneWidget);
-    expect(find.text('platform: ${Brightness.light.name}'), findsOneWidget);
 
     t.binding.platformDispatcher.platformBrightnessTestValue = Brightness.dark;
     await t.pump();
+    expect(find.text('platform: ${Brightness.dark.name}'), findsOneWidget);
     expect(find.text('brightness: ${Brightness.dark.name}'), findsOneWidget);
     expect(find.text('mode: ${ThemeMode.system.name}'), findsOneWidget);
-    expect(find.text('platform: ${Brightness.dark.name}'), findsOneWidget);
+  });
+
+  testWidgets('change theme mode', (t) async {
+    await builder((context) {
+      final theme = context.findAndTrust<CustomizedTheme>();
+      final platformBrightness = MediaQuery.of(context).platformBrightness;
+      void updateThemeMode(ThemeMode mode) =>
+          context.updateAndCheck<ThemeMode>((_) => mode);
+
+      return [
+        'platform: ${platformBrightness.name}'.asText,
+        'brightness: ${context.findAndTrust<Brightness>().name}'.asText,
+        'mode: ${context.findAndTrust<ThemeMode>().name}'.asText,
+        'background: ${theme.background.hex}'.asText,
+        'foreground: ${theme.foreground.hex}'.asText,
+        'to system'.asText.on(tap: () => updateThemeMode(ThemeMode.system)),
+        'to light'.asText.on(tap: () => updateThemeMode(ThemeMode.light)),
+        'to dark'.asText.on(tap: () => updateThemeMode(ThemeMode.dark)),
+      ].asColumn;
+    })
+        .center
+        .theme(light: light, dark: dark)
+        .builder((context, child) => child.ensureDirection(context))
+        .builder((context, child) => child.ensureMedia(context))
+        .pump(t);
+
+    t.binding.platformDispatcher.platformBrightnessTestValue = Brightness.light;
+    await t.pump();
+    expect(find.text('platform: ${Brightness.light.name}'), findsOneWidget);
+    expect(find.text('brightness: ${Brightness.light.name}'), findsOneWidget);
+    expect(find.text('mode: ${ThemeMode.system.name}'), findsOneWidget);
+    expect(find.text('background: ${light.background.hex}'), findsOneWidget);
+    expect(find.text('foreground: ${light.foreground.hex}'), findsOneWidget);
+
+    await t.tap(find.text('to dark'));
+    await t.pump();
+    expect(find.text('platform: ${Brightness.light.name}'), findsOneWidget);
+    expect(find.text('brightness: ${Brightness.dark.name}'), findsOneWidget);
+    expect(find.text('mode: ${ThemeMode.dark.name}'), findsOneWidget);
+    expect(find.text('background: ${dark.background.hex}'), findsOneWidget);
+    expect(find.text('foreground: ${dark.foreground.hex}'), findsOneWidget);
+
+    await t.tap(find.text('to light'));
+    await t.pump();
+    expect(find.text('platform: ${Brightness.light.name}'), findsOneWidget);
+    expect(find.text('brightness: ${Brightness.light.name}'), findsOneWidget);
+    expect(find.text('mode: ${ThemeMode.light.name}'), findsOneWidget);
+    expect(find.text('background: ${light.background.hex}'), findsOneWidget);
+    expect(find.text('foreground: ${light.foreground.hex}'), findsOneWidget);
   });
 }
 
