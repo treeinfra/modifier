@@ -4,19 +4,6 @@ import 'package:modifier/modifier.dart';
 import 'package:modifier_test/modifier_test.dart';
 
 void main() {
-  testFindAndTrust();
-  testInheritHandler();
-}
-
-/// Wrapping a single text message for demonstration.
-/// See the code inside [testFindAndTrust].
-class MessageExample {
-  const MessageExample({required this.message});
-
-  final String message;
-}
-
-void testFindAndTrust() {
   group('find and trust', () {
     // It's strongly not recommended to code like that,
     // because there might many inherited data with the String type
@@ -44,9 +31,7 @@ void testFindAndTrust() {
       expect(find.text(message), findsOneWidget);
     });
   });
-}
 
-void testInheritHandler() {
   testWidgets('inherit handler', (t) async {
     await builder((context) {
       final message = context.findAndTrust<String>();
@@ -108,4 +93,12 @@ void testInheritHandler() {
     expect(find.text('inner message: 123457'), findsOneWidget);
     expect(find.text('outer message: 123457'), findsOneWidget);
   });
+}
+
+/// Wrapping a single text message for demonstration.
+/// This is an encapsulation to avoid inherit the commonly used [String] type.
+class MessageExample {
+  const MessageExample({required this.message});
+
+  final String message;
 }
