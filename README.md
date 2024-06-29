@@ -5,8 +5,9 @@ Syntax sugar optimizations to avoid nesting hell in Flutter.
 ## Examples:
 
 Here is a **Before** code and an **After** code.
-Both their source codes are listed inside the child repositories 
-in the `example` folder, where you can read the source code 
+Both their source codes are listed inside the child repositories
+in [the `example` folder](./example),
+where you can read the source code
 and run them to see whether they have the same result.
 
 [Before](./example/before/lib/main.dart) (115 lines):

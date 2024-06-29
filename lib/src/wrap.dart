@@ -5,6 +5,11 @@ import 'package:flutter/widgets.dart';
 Widget builder(Widget Function(BuildContext context) builder) =>
     Builder(builder: builder);
 
+extension WrapBuilder on Widget {
+  Widget builder(Widget Function(BuildContext context, Widget child) builder) =>
+      Builder(builder: (context) => builder(context, this));
+}
+
 extension WrapTextWidget on String {
   /// Convert a string into text.
   ///
@@ -21,11 +26,24 @@ extension WrapMedia on Widget {
 
   /// Ensure that the inner widget can get [MediaQueryData] from the context.
   /// If there's no available [MediaQueryData], it will get from the [View].
-  Widget ensureMedia(BuildContext context) {
+  Widget ensureMedia(BuildContext context, {MediaQueryData? defaultValue}) {
     final contextMedia = MediaQuery.maybeOf(context);
     return contextMedia == null
-        ? media(MediaQueryData.fromView(View.of(context)))
+        ? media(defaultValue ?? MediaQueryData.fromView(View.of(context)))
         : this;
+  }
+
+  /// Modify media based on the media from [context].
+  /// If there's no [MediaQueryData] in [context],
+  /// it will get [MediaQueryData] from the [View].
+  Widget updateMedia(
+    BuildContext context,
+    MediaQueryData Function(MediaQueryData raw) updater,
+  ) {
+    final raw = MediaQuery.maybeOf(context) ??
+        MediaQueryData.fromView(View.of(context));
+    final media = updater(raw);
+    return raw == media ? this : this.media(media);
   }
 }
 
@@ -89,6 +107,23 @@ extension WrapPadding on Widget {
         ),
         child: this,
       );
+}
+
+extension WrapColor on Widget {
+  Widget background(Color color) => ColoredBox(color: color, child: this);
+
+  Widget foreground(BuildContext context, Color color) =>
+      textForeground(context, color).iconForeground(context, color);
+
+  Widget textForeground(BuildContext context, Color color) {
+    final font = DefaultTextStyle.of(context).style.copyWith(color: color);
+    return DefaultTextStyle(style: font, child: this);
+  }
+
+  Widget iconForeground(BuildContext context, Color color) {
+    final icon = IconTheme.of(context).copyWith(color: color);
+    return IconTheme(data: icon, child: this);
+  }
 }
 
 extension WrapList on List<Widget> {

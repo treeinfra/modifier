@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:modifier/modifier.dart';
+import 'package:modifier_test/modifier_test.dart';
 
 void main() {
   testFindAndTrust();
@@ -24,43 +25,42 @@ void testFindAndTrust() {
     // Please refer to the test below.
     testWidgets('find and trust', (t) async {
       const message = 'it works';
-      await t.pumpWidget(
-        builder((context) => Text(context.findAndTrust<String>())
-            .center
-            .ensureDirection(context)
-            .ensureMedia(context)).inherit(message),
-      );
+      await builder((context) => Text(context.findAndTrust<String>())
+          .center
+          .ensureDirection(context)
+          .ensureMedia(context)).inherit(message).pump(t);
       expect(find.text(message), findsOneWidget);
     });
 
     testWidgets('find and trust typed', (t) async {
       const message = 'it works';
-      await t.pumpWidget(
-        builder((context) =>
-                Text(context.findAndTrust<MessageExample>().message)
-                    .center
-                    .ensureDirection(context)
-                    .ensureMedia(context))
-            .inherit(const MessageExample(message: message)),
-      );
+      await builder((context) =>
+              Text(context.findAndTrust<MessageExample>().message)
+                  .center
+                  .ensureDirection(context)
+                  .ensureMedia(context))
+          .inherit(const MessageExample(message: message))
+          .pump(t);
+      expect(find.text(message), findsOneWidget);
     });
   });
 }
 
 void testInheritHandler() {
   testWidgets('inherit handler', (t) async {
-    await t.pumpWidget(builder((context) => builder((context) {
-          final message = context.findAndTrust<String>();
-          void update() => context.update<String>((message) => '$message.');
-          return [
-            'message: $message'.asText,
-            'append dot'.asText.on(tap: update)
-          ].asColumn;
-        })
-            .center
+    await builder((context) {
+      final message = context.findAndTrust<String>();
+      void update() => context.update<String>((message) => '$message.');
+      return [
+        'message: $message'.asText,
+        'append dot'.asText.on(tap: update),
+      ].asColumn;
+    })
+        .builder((context, child) => child.center
             .handle('message')
             .ensureDirection(context)
-            .ensureMedia(context)));
+            .ensureMedia(context))
+        .pump(t);
 
     expect(find.text('message: message'), findsOneWidget);
     expect(find.text('append dot'), findsOneWidget);
@@ -70,20 +70,25 @@ void testInheritHandler() {
   });
 
   testWidgets('inherit handler outer modify', (t) async {
-    await t.pumpWidget(builder((context) => builder(
-          (context) => builder((context) {
-            final inner = context.findAndTrust<String>();
-            final outer = context.findAndTrust<int>();
-            void append() => context.update<String>((inner) => '$inner.');
-            void increase() => context.update<int>((outer) => outer + 1);
-            return [
-              'inner message: $inner'.asText,
-              'outer message: $outer'.asText,
-              'append dot inner'.asText.on(tap: append),
-              'increase outer'.asText.on(tap: increase),
-            ].asColumn.center;
-          }).handle(context.find<int>().toString()),
-        ).handle(123456).ensureDirection(context).ensureMedia(context)));
+    await builder((context) {
+      final inner = context.findAndTrust<String>();
+      final outer = context.findAndTrust<int>();
+      void append() => context.update<String>((inner) => '$inner.');
+      void increase() => context.update<int>((outer) => outer + 1);
+      return [
+        'inner message: $inner'.asText,
+        'outer message: $outer'.asText,
+        'append dot inner'.asText.on(tap: append),
+        'increase outer'.asText.on(tap: increase),
+      ].asColumn;
+    })
+        .builder((context, c) => c.handle(context.find<int>().toString()))
+        .builder((context, child) => child
+            .handle(123456)
+            .center
+            .ensureDirection(context)
+            .ensureMedia(context))
+        .pump(t);
 
     // Initial values.
     expect(find.text('inner message: 123456'), findsOneWidget);

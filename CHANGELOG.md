@@ -1,7 +1,13 @@
+## 0.3.0
+
+- Wrap media with default value.
+- Wrap builder into chain style to avoid nesting.
+
 ## 0.2.0
 
-- Wrap inherit handler.
+- Wrap inherit and handler.
 - Wrap paddings.
+- Runner scripts for examples.
 - Basic gesture wrapper (experimental).
 - Remove unnecessary static inherit class and extensions (API change).
 
