@@ -1,0 +1,17 @@
+name: common
+description: Example for theme and locale using the modifier package.
+publish_to: "none"
+version: 0.0.0 # The version code will always be zero.
+environment: {sdk: ">=3.4.3 <4.0.0"}
+
+dependencies:
+  flutter: {sdk: flutter}
+
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test: {sdk: flutter}
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
