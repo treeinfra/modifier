@@ -32,6 +32,19 @@ extension WrapMedia on Widget {
         ? media(defaultValue ?? MediaQueryData.fromView(View.of(context)))
         : this;
   }
+
+  /// Modify media based on the media from [context].
+  /// If there's no [MediaQueryData] in [context],
+  /// it will get [MediaQueryData] from the [View].
+  Widget updateMedia(
+    BuildContext context,
+    MediaQueryData Function(MediaQueryData raw) updater,
+  ) {
+    final raw = MediaQuery.maybeOf(context) ??
+        MediaQueryData.fromView(View.of(context));
+    final media = updater(raw);
+    return raw == media ? this : this.media(media);
+  }
 }
 
 extension WrapDirection on Widget {
