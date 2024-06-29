@@ -1,3 +1,4 @@
+import 'package:color_chart/color_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -25,4 +26,29 @@ void main() {
     await t.pump();
     expect(find.text('brightness: ${Brightness.dark.name}'), findsOneWidget);
   });
+
+  testWidgets('theme adapt', (t) async {
+    const light = CustomizedTheme.light();
+    expect(light, light);
+    const dark = CustomizedTheme.dark();
+    expect(dark, dark);
+  });
+}
+
+class CustomizedTheme with Theme {
+  const CustomizedTheme.light({
+    this.background = MonoColors.snow,
+    this.foreground = MonoColors.coal,
+  });
+
+  const CustomizedTheme.dark({
+    this.background = MonoColors.night,
+    this.foreground = MonoColors.lunar,
+  });
+
+  @override
+  final Color background;
+
+  @override
+  final Color foreground;
 }
