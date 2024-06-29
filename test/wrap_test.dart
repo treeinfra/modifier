@@ -25,12 +25,13 @@ void testText() {
         return 'brightness: ${brightness.name}'.asText;
       },
     )
+        .center
         .builder((c, child) => updateBrightness(c, child, Brightness.dark))
         .builder((c, child) => updateBrightness(c, child, Brightness.light))
         .builder(
-          (context, child) => child.center
+          (context, child) => child
               .ensureDirection(context)
-              .ensureMedia(context), // demo
+              .ensureMedia(context), // Line break.
         )
         .pump(t);
 
