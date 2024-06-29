@@ -5,6 +5,11 @@ import 'package:flutter/widgets.dart';
 Widget builder(Widget Function(BuildContext context) builder) =>
     Builder(builder: builder);
 
+extension WrapBuilder on Widget {
+  Widget builder(Widget Function(BuildContext context, Widget child) builder) =>
+      Builder(builder: (context) => builder(context, this));
+}
+
 extension WrapTextWidget on String {
   /// Convert a string into text.
   ///
