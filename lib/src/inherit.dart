@@ -75,8 +75,11 @@ extension FindInherit on BuildContext {
 }
 
 /// A stateful widget to handle [Inherit]ed data in widget tree.
-/// You can change the handled data from the descendants in the widget tree
-/// using the [BuildContext]'s [InheritHandlerAPI.update] extension method.
+///
+/// 1. You can change the handled data from the descendants in the widget tree
+///    using the [BuildContext]'s [InheritHandlerAPI.update] extension method.
+/// 2. You can also customize [onUpdate] callback to resolve
+///    actions when the value changed.
 ///
 /// It's strongly not recommended to use it directly,
 /// please consider using [WrapInheritHandler.handle] extended on [Widget]
@@ -87,10 +90,12 @@ class InheritHandler<T> extends StatefulWidget {
   /// before using such constructor directly.
   const InheritHandler({
     super.key,
+    this.onUpdate,
     required this.data,
     required this.child,
   });
 
+  final void Function(T value)? onUpdate;
   final T data;
   final Widget child;
 
@@ -102,7 +107,9 @@ class _InheritHandlerState<T> extends State<InheritHandler<T>> {
   late T _data = widget.data;
 
   void update(T value) {
-    if (_data != value) setState(() => _data = value);
+    if (_data == value) return;
+    setState(() => _data = value);
+    widget.onUpdate?.call(value);
   }
 
   @override
@@ -127,7 +134,18 @@ class InheritHandlerAPI<T> {
 }
 
 extension WrapInheritHandler on Widget {
-  Widget handle<T>(T data) => InheritHandler<T>(data: data, child: this);
+  /// Handle a data of type [T] into the widget tree.
+  ///
+  /// 1. This extension method is an encapsulation of [InheritHandler].
+  /// 2. You can use [UpdateInheritHandler.update] extension method
+  ///    to modify the handled value.
+  /// 3. You can also specify [onUpdate] to register trigger actions
+  ///    when the value changed.
+  Widget handle<T>(T data, {void Function(T)? onUpdate}) => InheritHandler<T>(
+        onUpdate: onUpdate,
+        data: data,
+        child: this,
+      );
 }
 
 extension UpdateInheritHandler on BuildContext {
