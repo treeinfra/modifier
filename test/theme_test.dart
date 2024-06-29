@@ -6,6 +6,9 @@ import 'package:modifier/modifier.dart';
 import 'package:modifier_test/modifier_test.dart';
 
 void main() {
+  const light = CustomizedTheme.light();
+  const dark = CustomizedTheme.dark();
+
   testWidgets('platform media', (t) async {
     await builder((context) =>
             'brightness: ${MediaQuery.of(context).platformBrightness.name}'
@@ -27,11 +30,33 @@ void main() {
     expect(find.text('brightness: ${Brightness.dark.name}'), findsOneWidget);
   });
 
-  testWidgets('theme adapt', (t) async {
-    const light = CustomizedTheme.light();
-    expect(light, light);
-    const dark = CustomizedTheme.dark();
-    expect(dark, dark);
+  testWidgets('brightness adapt', (t) async {
+    await builder((context) {
+      final platformBrightness = MediaQuery.of(context).platformBrightness;
+      return [
+        'brightness: ${context.findAndTrust<Brightness>().name}'.asText,
+        'mode: ${context.findAndTrust<ThemeMode>().name}'.asText,
+        'platform: ${platformBrightness.name}'.asText,
+      ].asColumn;
+    })
+        .center
+        .builder((context, child) => child
+            .theme(light: light, dark: dark)
+            .ensureDirection(context)
+            .ensureMedia(context))
+        .pump(t);
+
+    t.binding.platformDispatcher.platformBrightnessTestValue = Brightness.light;
+    await t.pump();
+    expect(find.text('brightness: ${Brightness.light.name}'), findsOneWidget);
+    expect(find.text('mode: ${ThemeMode.system.name}'), findsOneWidget);
+    expect(find.text('platform: ${Brightness.light.name}'), findsOneWidget);
+
+    t.binding.platformDispatcher.platformBrightnessTestValue = Brightness.dark;
+    await t.pump();
+    expect(find.text('brightness: ${Brightness.dark.name}'), findsOneWidget);
+    expect(find.text('mode: ${ThemeMode.system.name}'), findsOneWidget);
+    expect(find.text('platform: ${Brightness.dark.name}'), findsOneWidget);
   });
 }
 
