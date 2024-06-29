@@ -17,5 +17,5 @@ dependencies:
 dev_dependencies:
   color_chart: ^0.2.0
   flutter_test: {sdk: flutter}
-  lintall: ^0.1.0
+  lintall: ^0.1.1
   modifier_test: ^0.1.0
