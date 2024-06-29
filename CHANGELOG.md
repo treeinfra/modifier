@@ -1,6 +1,7 @@
 ## 0.3.0
 
 - Wrap media with default value.
+- Wrap builder into chain style to avoid nesting.
 
 ## 0.2.0
 
