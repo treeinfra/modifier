@@ -5,12 +5,10 @@ version: 0.0.0 # The version code will always be zero.
 environment: {sdk: ">=3.4.3 <4.0.0"}
 
 dependencies:
-  cupertino_icons: ^1.0.6
+  color_chart: ^0.2.0
   flutter: {sdk: flutter}
+  modifier: {path: ../../}
 
 dev_dependencies:
   flutter_test: {sdk: flutter}
   lintall: ^0.1.1
-
-flutter:
-  uses-material-design: true
