@@ -2,8 +2,8 @@
 aim=$1
 
 # Ensure input parameter is valid (only two examples: before and after).
-if [ "$aim" != "before" ] && [ "$aim" != "after" ]; then
-  echo "Usage: $0 <before|after>"
+if [ "$aim" != "before" ] && [ "$aim" != "after" ] && [ "$aim" != "common" ]; then
+  echo "Usage: $0 <before|after|common>"
   exit 1
 fi
 
