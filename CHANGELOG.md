@@ -1,3 +1,9 @@
+## 0.4.1
+
+- Rename `ThemeMixin` (API change).
+- Example code for theme usages.
+- Review scripts for all child repos.
+
 ## 0.4.0
 
 - Theme template and theme handler.

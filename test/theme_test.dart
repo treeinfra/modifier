@@ -108,7 +108,7 @@ void main() {
   });
 }
 
-class CustomizedTheme with Theme {
+class CustomizedTheme with ThemeMixin {
   const CustomizedTheme.light({
     this.background = MonoColors.snow,
     this.foreground = MonoColors.coal,

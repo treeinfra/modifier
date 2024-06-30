@@ -1,10 +1,11 @@
-name: modifier_example_after
-description: An example after using the modifier package.
+name: common
+description: Example for theme and locale using the modifier package.
 publish_to: "none"
-version: 0.0.0
+version: 0.0.0 # The version code will always be zero.
 environment: {sdk: ">=3.4.3 <4.0.0"}
 
 dependencies:
+  color_chart: ^0.2.0
   flutter: {sdk: flutter}
   modifier: {path: ../../}
 
