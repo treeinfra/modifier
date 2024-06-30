@@ -15,7 +15,7 @@ class App extends StatelessWidget {
     return builder((context) {
       final platformBrightness = MediaQuery.of(context).platformBrightness;
       final brightness = context.findAndTrust<Brightness>();
-      final theme = context.findAndTrust<ThemeData>();
+      final theme = context.findAndTrust<Theme>();
       return [
         'Platform brightness: ${platformBrightness.name}'.asText,
         'Theme brightness: ${brightness.name}'.asText,
@@ -24,19 +24,19 @@ class App extends StatelessWidget {
       ].asColumn;
     })
         .center
-        .theme(light: const ThemeData.light(), dark: const ThemeData.dark())
+        .theme(light: const Theme.light(), dark: const Theme.dark())
         .ensureDirection(context)
         .ensureMedia(context);
   }
 }
 
-class ThemeData with Theme {
-  const ThemeData.light({
+class Theme with ThemeMixin {
+  const Theme.light({
     this.background = MonoColors.snow,
     this.foreground = MonoColors.ink,
   });
 
-  const ThemeData.dark({
+  const Theme.dark({
     this.background = MonoColors.night,
     this.foreground = MonoColors.lunar,
   });
